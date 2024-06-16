@@ -3,6 +3,12 @@
 Game::Game(){
   Game_Window = Initialize_Window();
   Level = 8;
+  for (int i = 0; i < 29; i++) {
+    Graphical_Matrix[i][0] = 1;
+    Graphical_Matrix[i][1] = 1;
+    Graphical_Matrix[i][12] = 1;
+    Graphical_Matrix[i][13] = 1;
+  }
   Active_Piece = new Piece(Random_Number());
 }
 
@@ -17,7 +23,7 @@ void Game::Update_Terminal() {
   for (int i = 0; i < 25; i++) {
     Character_Rows[i] = "";
     for (int j = 0; j < 10; j++) {
-      if ((Graphical_Matrix[i+4][j] == 1)|(Graphical_Matrix[i+4][j] == 2)) Character_Rows[i]+="[]";
+      if ((Graphical_Matrix[i+4][j+2] == 1)|(Graphical_Matrix[i+4][j+2] == 2)) Character_Rows[i]+="[]";
       else Character_Rows[i]+="  ";
     }
   }
@@ -74,121 +80,20 @@ void Game::Advance_Frame() {
   if(Active_Piece->Down(Graphical_Matrix)==false) {
     delete Active_Piece;
     Active_Piece = new Piece(Random_Number());
+    //Active_Piece = new Piece(J);
   }
   Update_Terminal();
 }
 
 void Game::Process_Command(bool Up, bool Down, bool Left, bool Right, bool Counter_Clockwise, bool Clockwise) {
-  if (Up == 1) {
-    ;
+  if (Up) {
+    Update_Terminal();
+    return;
   }
-  else if (Down & Left & Right & Counter_Clockwise & Clockwise) {
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-  else if (Down & Left & Right & Counter_Clockwise) {
-    Active_Piece->Counter_Clockwise(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-  else if (Down & Left & Right & Clockwise) {
-    Active_Piece->Clockwise(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-  else if (Left & Right & Clockwise) {
-    Active_Piece->Clockwise(Graphical_Matrix);
-  }
-  else if (Left & Right & Counter_Clockwise) {
-    Active_Piece->Counter_Clockwise(Graphical_Matrix);
-  }
-  else if (Down & Left & Clockwise) {
-    Active_Piece->Clockwise(Graphical_Matrix);
-    Active_Piece->Left(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-    else if (Down & Right & Clockwise) {
-    Active_Piece->Clockwise(Graphical_Matrix);
-    Active_Piece->Right(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-    else if (Down & Left & Counter_Clockwise) {
-    Active_Piece->Counter_Clockwise(Graphical_Matrix);
-    Active_Piece->Left(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-    else if (Down & Right & Counter_Clockwise) {
-    Active_Piece->Counter_Clockwise(Graphical_Matrix);
-    Active_Piece->Right(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-  else if (Down & Left & Right) {
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-  
-  else if (Down & Clockwise){
-    Active_Piece->Clockwise(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-
-  else if (Down & Counter_Clockwise){
-    Active_Piece->Counter_Clockwise(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-  else if (Down & Left){
-    Active_Piece->Left(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-  else if (Down & Right){
-    Active_Piece->Right(Graphical_Matrix);
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-  else if (Left & Right);
-  else if (Down) {
-    if(Active_Piece->Down(Graphical_Matrix)==false) {
-      delete Active_Piece;
-      Active_Piece = new Piece(Random_Number());
-    }
-  }
-  else if (Right) {
-    Active_Piece->Right(Graphical_Matrix);
-  }
-      
-  else if(Left) {
-    Active_Piece->Left(Graphical_Matrix);
-  }  
+  if (Clockwise)         Active_Piece->Clockwise        (Graphical_Matrix);
+  if (Counter_Clockwise) Active_Piece->Counter_Clockwise(Graphical_Matrix);
+  if (Right)             Active_Piece->Right            (Graphical_Matrix); 
+  if (Left)              Active_Piece->Left             (Graphical_Matrix); 
+  if (Down)              Active_Piece->Down             (Graphical_Matrix); 
   Update_Terminal();
 }

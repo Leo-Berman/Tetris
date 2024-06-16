@@ -23,11 +23,11 @@ public:
   int Shape;
   int Position;
   Piece(int Type);
-  bool Down(int Graphical_Matrix[29][10]);
-  void Left(int Graphical_Matrix[29][10]);
-  void Right(int Graphical_Matrix[29][10]);
-  void Counter_Clockwise(int Graphical_Matrix[29][10]);
-  void Clockwise(int Graphical_Matrix[29][10]);
+  bool Down(int Graphical_Matrix[29][14]);
+  void Left(int Graphical_Matrix[29][14]);
+  void Right(int Graphical_Matrix[29][14]);
+  void Counter_Clockwise(int Graphical_Matrix[29][14]);
+  void Clockwise(int Graphical_Matrix[29][14]);
   
 };
 
@@ -39,7 +39,7 @@ public:
 class Game{
  public:
   WINDOW* Game_Window;
-  int Graphical_Matrix[29][10] = {};
+  int Graphical_Matrix[29][14] = {};
   int Level;
   Piece* Active_Piece;
   Game();
