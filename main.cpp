@@ -5,7 +5,15 @@
 #include <tuple>
 #include <chrono>
 #include <thread>
-#include <random>
+#include <cstdlib>
+#include "SDL/SDL.h"
+
+#define I_Piece 0
+#define Z_Piece 1
+#define S_Piece 2
+#define J_Piece 3
+#define L_Piece 4
+#define O_Piece 5
 
 WINDOW* Initialize_Window() {
 
@@ -36,6 +44,19 @@ WINDOW* Initialize_Window() {
 
 }
 
+int Random_Number() {
+
+  using namespace std;
+  
+  // Providing a seed value
+  srand((unsigned) time(NULL));
+
+  // Get a random number
+  int random = rand();
+
+  return random%5;
+}
+
 void Update_Screen(WINDOW* Input_Window,int Graphical_Matrix[29][10]) {
 
   std::string Character_Rows[25];  
@@ -59,23 +80,41 @@ public:
   
   Piece(int Piece_Type) {
     switch(Piece_Type) {
-    case(0):
-      Piece_Coordinates[0] = std::make_tuple(0,3);
-      Piece_Coordinates[1] = std::make_tuple(0,4);
-      Piece_Coordinates[2] = std::make_tuple(0,5);
-      Piece_Coordinates[3] = std::make_tuple(0,6);
+    case(I_Piece):
+      Piece_Coordinates[0] = std::make_tuple(2,3);
+      Piece_Coordinates[1] = std::make_tuple(2,4);
+      Piece_Coordinates[2] = std::make_tuple(2,5);
+      Piece_Coordinates[3] = std::make_tuple(2,6);
       break;
-    case(1):
-      Piece_Coordinates[0] = std::make_tuple(0,3);
-      Piece_Coordinates[1] = std::make_tuple(0,4);
-      Piece_Coordinates[2] = std::make_tuple(1,4);
-      Piece_Coordinates[3] = std::make_tuple(1,5);
+    case(Z_Piece):
+      Piece_Coordinates[0] = std::make_tuple(2,3);
+      Piece_Coordinates[1] = std::make_tuple(2,4);
+      Piece_Coordinates[2] = std::make_tuple(3,4);
+      Piece_Coordinates[3] = std::make_tuple(3,5);
       break;
-    case(2):
-      Piece_Coordinates[0] = std::make_tuple(1,5);
+    case(S_Piece):
+      Piece_Coordinates[0] = std::make_tuple(3,5);
+      Piece_Coordinates[1] = std::make_tuple(3,4);
+      Piece_Coordinates[2] = std::make_tuple(2,4);
+      Piece_Coordinates[3] = std::make_tuple(2,3);
+      break;
+    case(J_Piece):
+      Piece_Coordinates[0] = std::make_tuple(2,4);
+      Piece_Coordinates[1] = std::make_tuple(2,5);
+      Piece_Coordinates[2] = std::make_tuple(2,6);
+      Piece_Coordinates[3] = std::make_tuple(3,6);
+      break;
+    case(L_Piece):
+      Piece_Coordinates[0] = std::make_tuple(3,4);
+      Piece_Coordinates[1] = std::make_tuple(2,4);
+      Piece_Coordinates[2] = std::make_tuple(2,5);
+      Piece_Coordinates[3] = std::make_tuple(2,6);
+      break;
+    case(O_Piece):
+      Piece_Coordinates[0] = std::make_tuple(2,4);
       Piece_Coordinates[1] = std::make_tuple(1,4);
-      Piece_Coordinates[2] = std::make_tuple(0,4);
-      Piece_Coordinates[3] = std::make_tuple(0,3);
+      Piece_Coordinates[2] = std::make_tuple(2,5);
+      Piece_Coordinates[3] = std::make_tuple(1,5);
       break;
     }
   }
@@ -142,7 +181,13 @@ public:
       for (auto [i,j] : Piece_Coordinates) Graphical_Matrix[i][j] = 2;
     }
   }
-  
+
+  void Rotate_Piece(int Graphical_Matrix[29][10]) {
+
+    bool Ok_To_Rotate = true;
+
+    
+  }
 };
 
 
@@ -184,37 +229,104 @@ int main(){
     {0,0,0,0,0,0,0,0,0,0},
   };
   
-  int frame_counter = 0;
+  int Frame_Counter = 1;
+  int Game_Level = 8;
+  Piece Active_Piece = Piece(Random_Number());
+  SDL_Event Keyboard_Event;
+  bool Down_State = 0;
+  bool Left_State = 0;
+  bool Right_State = 0;
+  bool Up_State = 0;
 
-  int game_level = 8;
+  if( SDL_Init( SDL_INIT_VIDEO ) < 0) exit( -1 );
+  if( !SDL_SetVideoMode( 250, 250, 0, 0 ) ){
+    SDL_Quit();
+    exit( -1 );
+  }
+  
+  while(true){ 
+    SDL_PollEvent( &Keyboard_Event );
 
-  Piece Active_Piece = Piece(rand() % static_cast<int>(2 + 1));
-
-  while(true){
-
-    int Keystroke = getch();
-
-    switch(Keystroke) {
-      case(KEY_LEFT): Active_Piece.Move_Piece_Left(Graphical_Matrix); break;
-      case(KEY_RIGHT): Active_Piece.Move_Piece_Right(Graphical_Matrix); break;
-      case(KEY_DOWN):
+    switch(Keyboard_Event.key.keysym.sym){
+    case SDLK_DOWN:
+      if (Keyboard_Event.type == SDL_KEYDOWN) {
+	Down_State = true;
+      }
+      else if (Keyboard_Event.type == SDL_KEYUP) {
+	Down_State = false;
+      }
+      break;
+    case SDLK_UP:
+      if (Keyboard_Event.type == SDL_KEYDOWN) {
+	Up_State = true;
+      }
+      else if (Keyboard_Event.type == SDL_KEYUP) {
+	Up_State = false;
+      }
+      break;
+    case SDLK_LEFT:
+      if (Keyboard_Event.type == SDL_KEYDOWN) {
+	Left_State = true;
+      }
+      else if (Keyboard_Event.type == SDL_KEYUP) {
+	Left_State = false;
+      }
+      break;
+    case SDLK_RIGHT:
+      if (Keyboard_Event.type == SDL_KEYDOWN) {
+	Right_State = true;
+      }
+      else if (Keyboard_Event.type == SDL_KEYUP) {
+	Right_State = false;
+      }
+      break;
+    }
+      if (Frame_Counter % 6 == 0) {
+	
+	if (Up_State == 1) {
+	  ;
+	}
+	else if (Down_State & Left_State & Right_State) {
 	if(Active_Piece.Move_Piece_Down(Graphical_Matrix)==false) {
-	  Active_Piece = Piece(rand() % static_cast<int>(2 + 1));
-	};
-	break;
-      default:
-	if (GetKeyState(VK_MENU) & 0x8000)
+	  Active_Piece = Piece(Random_Number());
+	}
+      }
+      else if (Down_State & Left_State){
+	Active_Piece.Move_Piece_Left(Graphical_Matrix);
+	if(Active_Piece.Move_Piece_Down(Graphical_Matrix)==false) {
+	  Active_Piece = Piece(Random_Number());
+	}
+      }
+      else if (Down_State & Right_State){
+	Active_Piece.Move_Piece_Right(Graphical_Matrix);
+	if(Active_Piece.Move_Piece_Down(Graphical_Matrix)==false) {
+	  Active_Piece = Piece(Random_Number());
+	}
+      }
+      else if (Down_State) {
+	if(Active_Piece.Move_Piece_Down(Graphical_Matrix)==false) {
+	  Active_Piece = Piece(Random_Number());
+	}
+      }
+      else if (Right_State) {
+	Active_Piece.Move_Piece_Right(Graphical_Matrix);
+      }
+      
+      else if(Left_State) {
+	Active_Piece.Move_Piece_Left(Graphical_Matrix);
+      }
+
     }
     
-    if (frame_counter == 59-game_level*5) {
-      frame_counter = 0;
+    if (Frame_Counter == 60-Game_Level*6) {
+      Frame_Counter = 1;
       if(Active_Piece.Move_Piece_Down(Graphical_Matrix)==false) {
-	Active_Piece = Piece(rand() % static_cast<int>(2 + 1));
+	Active_Piece = Piece(Random_Number());
       }
     }
     Update_Screen(Game_Window,Graphical_Matrix);
     wrefresh(Game_Window);
-    frame_counter++;
+    Frame_Counter++;
     std::this_thread::sleep_for(std::chrono::milliseconds(17));
   }
   
