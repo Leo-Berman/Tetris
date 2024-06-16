@@ -5,6 +5,7 @@
 #include <tuple>
 #include <chrono>
 #include <thread>
+#include <random>
 
 WINDOW* Initialize_Window() {
 
@@ -52,84 +53,101 @@ void Update_Screen(WINDOW* Input_Window,int Graphical_Matrix[29][10]) {
 }
 
 class Piece {
-  public:
-
-    std::tuple<int,int> Piece_Coordinates[4];
-
-    Piece(char Piece_Type) {
-      switch(Piece_Type){
-        case('I'):
- 	  Piece_Coordinates[0] = std::make_tuple(4,0);
-	  Piece_Coordinates[1] = std::make_tuple(4,1);
-	  Piece_Coordinates[2] = std::make_tuple(4,2);
-	  Piece_Coordinates[3] = std::make_tuple(4,3);
-	  break;
-	case('Z'):
-	  Piece_Coordinates[0] = std::make_tuple(4,0);
-	  Piece_Coordinates[1] = std::make_tuple(4,1);
-	  Piece_Coordinates[2] = std::make_tuple(4,2);
-	  Piece_Coordinates[3] = std::make_tuple(4,3);
-      }
+public:
+  
+  std::tuple<int,int> Piece_Coordinates[4];
+  
+  Piece(int Piece_Type) {
+    switch(Piece_Type) {
+    case(0):
+      Piece_Coordinates[0] = std::make_tuple(0,3);
+      Piece_Coordinates[1] = std::make_tuple(0,4);
+      Piece_Coordinates[2] = std::make_tuple(0,5);
+      Piece_Coordinates[3] = std::make_tuple(0,6);
+      break;
+    case(1):
+      Piece_Coordinates[0] = std::make_tuple(0,3);
+      Piece_Coordinates[1] = std::make_tuple(0,4);
+      Piece_Coordinates[2] = std::make_tuple(1,4);
+      Piece_Coordinates[3] = std::make_tuple(1,5);
+      break;
+    case(2):
+      Piece_Coordinates[0] = std::make_tuple(1,5);
+      Piece_Coordinates[1] = std::make_tuple(1,4);
+      Piece_Coordinates[2] = std::make_tuple(0,4);
+      Piece_Coordinates[3] = std::make_tuple(0,3);
+      break;
     }
+  }
+  
+  bool Move_Piece_Down(int Graphical_Matrix[29][10]) {
+
+    bool Ok_To_Move = true;
+    
+    for (auto [i,j] : Piece_Coordinates) {
+      if ((Graphical_Matrix[i+1][j]==1) | (i == 28)) Ok_To_Move = false;
+    }
+
+    if (Ok_To_Move == true) {
+      for (int i = 0; i < 4; i++) {
+	int Y_Coordinate = std::get<0>(Piece_Coordinates[i]);
+	int X_Coordinate = std::get<1>(Piece_Coordinates[i]);
+	Graphical_Matrix[Y_Coordinate][X_Coordinate] = 0;
+	std::get<0>(Piece_Coordinates[i])++;
+      }
+      for (auto [i,j] : Piece_Coordinates) Graphical_Matrix[i][j] = 2;
+      return true;
+    }
+    else {
+      for (auto [i,j] : Piece_Coordinates) Graphical_Matrix[i][j] = 1;
+      return false;
+    }
+  }
+
+  void Move_Piece_Left(int Graphical_Matrix[29][10]) {
+    
+    bool Ok_To_Move = true;
+    
+    for (auto [i,j]: Piece_Coordinates){
+      if ((Graphical_Matrix[i][j-1]==1 ) | (j == 0)) Ok_To_Move = false;
+    }
+
+    if (Ok_To_Move == true) {
+      for (int i = 0; i < 4; i++) {
+	int Y_Coordinate = std::get<0>(Piece_Coordinates[i]);
+	int X_Coordinate = std::get<1>(Piece_Coordinates[i]);
+	Graphical_Matrix[Y_Coordinate][X_Coordinate] = 0;
+	std::get<1>(Piece_Coordinates[i])--;
+      }
+      for (auto [i,j] : Piece_Coordinates) Graphical_Matrix[i][j] = 2;
+    }
+  }
+
+  
+  void Move_Piece_Right(int Graphical_Matrix[29][10]) {
+    
+    bool Ok_To_Move = true;
+    
+    for (auto [i,j]: Piece_Coordinates){
+      if ((Graphical_Matrix[i][j+1]==1 ) | (j == 9)) Ok_To_Move = false;
+    }
+    
+     if (Ok_To_Move == true) {
+      for (int i = 0; i < 4; i++) {
+	int Y_Coordinate = std::get<0>(Piece_Coordinates[i]);
+	int X_Coordinate = std::get<1>(Piece_Coordinates[i]);
+	Graphical_Matrix[Y_Coordinate][X_Coordinate] = 0;
+	std::get<1>(Piece_Coordinates[i])++;
+      }
+      for (auto [i,j] : Piece_Coordinates) Graphical_Matrix[i][j] = 2;
+    }
+  }
+  
 };
 
 
-std::vector<std::tuple<int,int>> Get_Active_Piece_Position(int Graphical_Matrix[29][10]) {
 
-  std::vector<std::tuple<int, int>>  Active_Piece_Coordinates;
-
-  for (int j = 0; j < 10; j++) {
-    for (int i = 0; i < 29; i++) {
-      if (Graphical_Matrix[i][j] == 2) Active_Piece_Coordinates.push_back(std::make_tuple(i,j));
-    }
-  }
-
-  return Active_Piece_Coordinates;
-}
-
-void Move_Piece_Down(int Graphical_Matrix[29][10],std::vector<std::tuple<int,int>> Active_Piece_Position){
-
-  bool Ok_To_Move = true;
-
-  for (auto [i,j]: Active_Piece_Position){
-      if ((Graphical_Matrix[i+1][j]==1) | (i == 28)) Ok_To_Move = false;
-  }
-
-  if (Ok_To_Move == true) {
-    for (auto [i,j] : Active_Piece_Position) Graphical_Matrix[i][j] = 0;
-    for (auto [i,j] : Active_Piece_Position) Graphical_Matrix[i+1][j] = 2;
-  }
-}
-
-void Move_Piece_Left(int Graphical_Matrix[29][10],std::vector<std::tuple<int,int>> Active_Piece_Position) {
-
-  bool Ok_To_Move = true;
-
-  for (auto [i,j]: Active_Piece_Position){
-    if ((Graphical_Matrix[i][j-1]==1 ) | (j == 0)) Ok_To_Move = false;
-  }
-
-  if (Ok_To_Move == true) {
-    for (auto [i,j] : Active_Piece_Position) Graphical_Matrix[i][j] = 0;
-    for (auto [i,j] : Active_Piece_Position) Graphical_Matrix[i][j-1] = 2;
-  }
-}
-
-void Move_Piece_Right(int Graphical_Matrix[29][10],std::vector<std::tuple<int,int>> Active_Piece_Position) {
-
-  bool Ok_To_Move = true;
-
-  for (auto [i,j]: Active_Piece_Position){
-    if ((Graphical_Matrix[i][j+1]==1 ) | (j == 9)) Ok_To_Move = false;
-  }
-
-  if (Ok_To_Move == true) {
-    for (auto [i,j] : Active_Piece_Position) Graphical_Matrix[i][j] = 0;
-    for (auto [i,j] : Active_Piece_Position) Graphical_Matrix[i][j+1] = 2;
-  }
-
-}
-
+  
 int main(){
 
   WINDOW* Game_Window = Initialize_Window();
@@ -165,22 +183,34 @@ int main(){
     {0,0,0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0,0,0},
   };
+  
   int frame_counter = 0;
+
   int game_level = 8;
+
+  Piece Active_Piece = Piece(rand() % static_cast<int>(2 + 1));
+
   while(true){
 
     int Keystroke = getch();
 
-    std::vector<std::tuple<int,int>> Active_Piece_Position = Get_Active_Piece_Position(Graphical_Matrix);
-
     switch(Keystroke) {
-      case(KEY_LEFT): Move_Piece_Left(Graphical_Matrix, Active_Piece_Position); break;
-      case(KEY_RIGHT): Move_Piece_Right(Graphical_Matrix, Active_Piece_Position); break;
+      case(KEY_LEFT): Active_Piece.Move_Piece_Left(Graphical_Matrix); break;
+      case(KEY_RIGHT): Active_Piece.Move_Piece_Right(Graphical_Matrix); break;
+      case(KEY_DOWN):
+	if(Active_Piece.Move_Piece_Down(Graphical_Matrix)==false) {
+	  Active_Piece = Piece(rand() % static_cast<int>(2 + 1));
+	};
+	break;
+      default:
+	if (GetKeyState(VK_MENU) & 0x8000)
     }
     
     if (frame_counter == 59-game_level*5) {
       frame_counter = 0;
-      Move_Piece_Down(Graphical_Matrix, Active_Piece_Position);
+      if(Active_Piece.Move_Piece_Down(Graphical_Matrix)==false) {
+	Active_Piece = Piece(rand() % static_cast<int>(2 + 1));
+      }
     }
     Update_Screen(Game_Window,Graphical_Matrix);
     wrefresh(Game_Window);
