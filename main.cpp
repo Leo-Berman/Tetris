@@ -1,6 +1,4 @@
 // Library imports
-#include <chrono>
-#include <thread>
 #include "SDL/SDL.h"
 #include "class_definitions.h"
 
@@ -45,6 +43,9 @@ int main(){
     switch(Keyboard_Event.key.keysym.sym){
     case SDLK_DOWN:
       if (Keyboard_Event.type == SDL_KEYDOWN) {
+	if (Down_State == false) {
+	  Game_Instance->Process_Command(false,true,false,false,false,false);
+	}
 	Down_State = true;
 	Down_First_Hit = true;
       }
@@ -55,6 +56,10 @@ int main(){
       break;
     case SDLK_UP:
       if (Keyboard_Event.type == SDL_KEYDOWN) {
+	if (Up_State == false) {
+	  Game_Instance->Process_Command(true,false,false,false,false,false);
+
+	}
 	Up_State = true;
 	Up_First_Hit = true;
       }
@@ -65,6 +70,10 @@ int main(){
       break;
     case SDLK_LEFT:
       if (Keyboard_Event.type == SDL_KEYDOWN) {
+	if (Left_State == false) {
+	  Game_Instance->Process_Command(false,false,true,false,false,false);
+	  Delay_Auto_Shift = 16;
+	}
 	Left_State = true;
 	Left_First_Hit = true;
       }
@@ -75,6 +84,10 @@ int main(){
       break;
     case SDLK_RIGHT:
       if (Keyboard_Event.type == SDL_KEYDOWN) {
+	if (Right_State == false) {
+	  Game_Instance->Process_Command(false,false,false,true,false,false);
+	  Delay_Auto_Shift = 16;
+	}
 	Right_State = true;
 	Right_First_Hit = true;
       }
@@ -85,6 +98,9 @@ int main(){
       break;
     case SDLK_q:
       if (Keyboard_Event.type == SDL_KEYDOWN) {
+	if (Counter_Clockwise_State == false) {
+	  Game_Instance->Process_Command(false,false,false,false,true,false);
+	}
 	Counter_Clockwise_State = true;
 	Counter_Clockwise_First_Hit  = true;
       }
@@ -111,15 +127,9 @@ int main(){
     if (Advance_Frame) {
 
       Advance_Frame = false;
-      
-      if ( (Down_First_Hit | Up_First_Hit | Left_First_Hit | Right_First_Hit) & (First_Hit_Timer <= 0) ) {
-	Game_Instance->Process_Command(Up_State,Down_State,Left_State,Right_State, Counter_Clockwise_State, Clockwise_State,true);
-	First_Hit_Timer = 16;
-      }
-      if (Delay_Auto_Shift <= 6) {
-	if (Delay_Auto_Shift % 6 == 0) {
-	  Game_Instance->Process_Command(Up_State,Down_State,Left_State,Right_State, Counter_Clockwise_State, Clockwise_State,true);
-	}
+      if (Delay_Auto_Shift == 0) {
+	Game_Instance->Process_Command(Up_State,Down_State,Left_State,Right_State, false, false);
+	Delay_Auto_Shift = 6;
       }
 
       if (Frames_Until_Fall == 0) {

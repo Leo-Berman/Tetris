@@ -2,8 +2,10 @@
 #include <string>
 #include <cstdlib>
 #include <tuple>
-
-
+#include <vector>
+#include <chrono>
+#include <thread>
+#include <string.h>
 
 #ifndef PIECE_H
 #define PIECE_H
@@ -44,10 +46,12 @@ class Game{
   Piece* Active_Piece;
   Game();
   ~Game();
-  void Update_Terminal();  
+  bool Shift_Graphical_Matrix(int Row_To_Dissapear);
+  bool Check_Row(int Row_To_Check);
+  void Update_Terminal(bool Piece_Inserted = false);  
   WINDOW* Initialize_Window();
   int Random_Number();
-  void Process_Command(bool Up, bool Down, bool Left, bool Right, bool Counter_Clockwise, bool Clockwise, bool Auto_Shift  = false);
+  void Process_Command(bool Up, bool Down, bool Left, bool Right, bool Counter_Clockwise, bool Clockwise);
   void Advance_Frame();
 };
   

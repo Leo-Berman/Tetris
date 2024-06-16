@@ -45,7 +45,7 @@ Piece::Piece(int Type) {
     break;
   case(T):
     Coordinates[0] = make_tuple(1,4);
-    Coordinates[1] = make_tuple(2,4);
+    Coordinates[1] = make_tuple(1,5);
     Coordinates[2] = make_tuple(2,5);
     Coordinates[3] = make_tuple(1,6);
     break;
@@ -117,7 +117,7 @@ void Piece::Right(int Graphical_Matrix[29][14]) {
 
 void Piece::Clockwise(int Graphical_Matrix[29][14]) {
 
-  using std::get,std::make_tuple;
+  using std::get;
 
   int Pivot_X_Coordinate,Pivot_Y_Coordinate;
   
@@ -322,14 +322,521 @@ void Piece::Clockwise(int Graphical_Matrix[29][14]) {
       break;
     }
     break;
+  case(L):
+    switch(Position){
+    case(0):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate]   |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 1;
+      }
+      break;
+    case(1):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate+1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 2;
+      }
+      break;
+    case(2):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate] |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate] |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate+1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate-1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 3;
+      }
+      break;
+    case(3):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 0;
+      }
+      break;
+    }
+    break;
+  case(T):
+    switch(Position){
+    case(0):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 1;
+      }
+      break;
+    case(1):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 2;
+      }
+      break;
+    case(2):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate-1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 3;
+      }
+      break;
+    case(3):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 0;
+      }
+      break;
+    }
+    break;
   }
 }
 
 
 void Piece::Counter_Clockwise(int Graphical_Matrix[29][14]) {
+  
+  using std::get;
 
-  bool Ok_To_Rotate = true;
-
-    
+  int Pivot_X_Coordinate,Pivot_Y_Coordinate;
+  
+  switch(Shape){
+  case(I):
+    Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+    Pivot_X_Coordinate = get<1>(Coordinates[2]);
+    switch(Position){
+    case(0):
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate] |
+	    Graphical_Matrix[Pivot_Y_Coordinate-2][Pivot_X_Coordinate] |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-2;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 1;
+      }
+      break;
+    case(1):
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-2] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-2;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 0;
+      }
+      break;
+    }
+    break;
+  case(Z):
+    switch(Position){
+    case(0):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate+1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 1;
+      }
+      break;
+    case(1):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate+1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-1])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 0;
+      }
+      break;
+    }
+    break;
+  case(S):
+    switch(Position){
+    case(0):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate] |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate+1])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 1;
+      }
+      break;
+    case(1):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 0;
+      }
+      break;
+    }
+    break;
+ case(J):
+    switch(Position){
+    case(2):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate]   |
+	    Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 1;
+      }
+      break;
+    case(3):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate-1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate-1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 2;
+      }
+      break;
+    case(0):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate] |
+	    Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate] |
+	    Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate+1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate-1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 3;
+      }
+      break;
+    case(1):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate+1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 0;
+      }
+      break;
+    }
+    break;
+  case(L):
+    switch(Position){
+    case(2):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate]   |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 1;
+      }
+      break;
+    case(3):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate+1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 2;
+      }
+      break;
+    case(0):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate] |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate] |
+	    Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate+1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate-1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 3;
+      }
+      break;
+    case(1):
+      Pivot_Y_Coordinate = get<0>(Coordinates[2]);
+      Pivot_X_Coordinate = get<1>(Coordinates[2]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-1] |
+	    Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 0;
+      }
+      break;
+    }
+    break;
+  case(T):
+    switch(Position){
+    case(2):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate+1][Pivot_X_Coordinate])) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate+1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 1;
+      }
+      break;
+    case(3):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate-1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate-1;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 2;
+      }
+      break;
+    case(0):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate-1][Pivot_X_Coordinate] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate-1;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 3;
+      }
+      break;
+    case(1):
+      Pivot_Y_Coordinate = get<0>(Coordinates[1]);
+      Pivot_X_Coordinate = get<1>(Coordinates[1]);
+      if (!(Graphical_Matrix[Pivot_Y_Coordinate][Pivot_X_Coordinate+1] )) {
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 0;
+	get<1>(Coordinates[0]) = Pivot_X_Coordinate-1;
+	get<0>(Coordinates[0]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[1]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[1]) = Pivot_Y_Coordinate;
+	get<1>(Coordinates[2]) = Pivot_X_Coordinate;
+	get<0>(Coordinates[2]) = Pivot_Y_Coordinate+1;
+	get<1>(Coordinates[3]) = Pivot_X_Coordinate+1;
+	get<0>(Coordinates[3]) = Pivot_Y_Coordinate;
+	for (auto [i,j] : Coordinates) Graphical_Matrix[i][j] = 2;
+	Position = 0;
+      }
+      break;
+    }
+    break;
+  } 
 }
 
