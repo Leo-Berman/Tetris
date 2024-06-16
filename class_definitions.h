@@ -26,6 +26,7 @@ public:
   int Position;
   Piece(int Type);
   bool Down(int Graphical_Matrix[29][14]);
+  bool Is_Game_Over(int Graphical_Matrix[29][14]);
   void Left(int Graphical_Matrix[29][14]);
   void Right(int Graphical_Matrix[29][14]);
   void Counter_Clockwise(int Graphical_Matrix[29][14]);
@@ -41,18 +42,26 @@ public:
 class Game{
  public:
   WINDOW* Game_Window;
+  WINDOW* Future_Window;
+  WINDOW* Score_Window;
+  int Score;
   int Graphical_Matrix[29][14] = {};
   int Level;
+  int Next_Piece;
   Piece* Active_Piece;
   Game();
   ~Game();
-  bool Shift_Graphical_Matrix(int Row_To_Dissapear);
+  void Shift_Graphical_Matrix(int Row_To_Dissapear);
   bool Check_Row(int Row_To_Check);
+  bool Is_Game_Over();
   void Update_Terminal(bool Piece_Inserted = false);  
-  WINDOW* Initialize_Window();
+  WINDOW* Initialize_Game_Window();
+  WINDOW* Initialize_Future_Window();
+  WINDOW* Initialize_Score_Window();
   int Random_Number();
   void Process_Command(bool Up, bool Down, bool Left, bool Right, bool Counter_Clockwise, bool Clockwise);
-  void Advance_Frame();
+  bool Advance_Frame();
+  void Game_Over();
 };
   
 #endif

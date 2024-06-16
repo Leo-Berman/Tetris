@@ -12,6 +12,8 @@ int main(){
   int First_Hit_Timer = 6;
   int Frames_Until_Fall = Game_Instance->Level;
 
+  bool Game_Over = false;
+  
   bool Advance_Frame = false;
   
   bool Down_First_Hit = false;
@@ -134,7 +136,7 @@ int main(){
 
       if (Frames_Until_Fall == 0) {
 	Frames_Until_Fall = Game_Instance->Level;
-	Game_Instance->Advance_Frame();
+	Game_Over = Game_Instance->Advance_Frame();
       
       }
 
@@ -152,7 +154,13 @@ int main(){
       Previous_Time = std::chrono::high_resolution_clock::now();
       Advance_Frame = true;
     }
-        
+
+    if (Game_Over) {
+      Game_Instance->Game_Over();
+      getchar();
+      delete Game_Instance;
+      exit(0);
+    }
   }
   
 
