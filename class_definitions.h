@@ -47,7 +47,7 @@ class Game{
   void Update_Terminal();  
   WINDOW* Initialize_Window();
   int Random_Number();
-  void Process_Command(bool Up, bool Down, bool Left, bool Right, bool Counter_Clockwise, bool Clockwise);
+  void Process_Command(bool Up, bool Down, bool Left, bool Right, bool Counter_Clockwise, bool Clockwise, bool Auto_Shift  = false);
   void Advance_Frame();
 };
   

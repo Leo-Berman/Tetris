@@ -85,13 +85,15 @@ void Game::Advance_Frame() {
   Update_Terminal();
 }
 
-void Game::Process_Command(bool Up, bool Down, bool Left, bool Right, bool Counter_Clockwise, bool Clockwise) {
+void Game::Process_Command(bool Up, bool Down, bool Left, bool Right, bool Counter_Clockwise, bool Clockwise, bool Auto_Shift) {
   if (Up) {
     Update_Terminal();
     return;
   }
-  if (Clockwise)         Active_Piece->Clockwise        (Graphical_Matrix);
-  if (Counter_Clockwise) Active_Piece->Counter_Clockwise(Graphical_Matrix);
+  if (!(Auto_Shift)){
+    if (Clockwise)         Active_Piece->Clockwise        (Graphical_Matrix);
+    if (Counter_Clockwise) Active_Piece->Counter_Clockwise(Graphical_Matrix);
+  }
   if (Right)             Active_Piece->Right            (Graphical_Matrix); 
   if (Left)              Active_Piece->Left             (Graphical_Matrix); 
   if (Down)              Active_Piece->Down             (Graphical_Matrix); 
