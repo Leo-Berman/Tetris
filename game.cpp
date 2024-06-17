@@ -4,9 +4,10 @@ Game::Game(){
   Game_Window =   Initialize_Game_Window();
   Future_Window = Initialize_Future_Window();
   Score_Window = Initialize_Score_Window();
+  Lines_Cleared = 120;
   Score = 0;
   Next_Piece = Random_Number();
-  Level = 8;
+  Level = 0;
   for (int i = 0; i < 29; i++) {
     Graphical_Matrix[i][0] = 1;
     Graphical_Matrix[i][1] = 1;
@@ -19,6 +20,17 @@ Game::Game(){
 Game::~Game(){
   endwin();
   delete Active_Piece, Game_Window, Future_Window,Score_Window;
+}
+
+int Game::Get_Frame_Rate() {
+  Level = Lines_Cleared/10;
+  if ( (Level >= 0) & (Level <=8) ) return 48-(Level*5);
+  else if ( Level == 9) return 8;
+  else if ( ( Level >= 10 ) & ( Level <= 12 ) ) return 5;
+  else if ( ( Level >= 13 ) & ( Level <= 15 ) ) return 4;
+  else if ( ( Level >= 16 ) & ( Level <= 18 ) ) return 3;
+  else if ( ( Level >= 19 ) & ( Level <= 28 ) ) return 2;
+  else return 1;
 }
 
 void Game::Shift_Graphical_Matrix(int Row_To_Dissapear) {
@@ -37,7 +49,7 @@ bool Game::Check_Row(int Row_To_Check) {
 }
 
 WINDOW* Game::Initialize_Score_Window() {
-  WINDOW* Return_Window = newwin(4, 12, 6, 22);
+  WINDOW* Return_Window = newwin(12, 12, 6, 22);
   refresh();
   box(Return_Window, 0, 0);
   wrefresh(Return_Window);
@@ -137,7 +149,13 @@ void Game::Update_Terminal(bool Piece_Inserted) {
 
   mvwprintw(Score_Window,1,1,"Score :");
   mvwprintw(Score_Window,2,1,std::to_string(Score).c_str());
+  mvwprintw(Score_Window,4,1,"Level :");
+  mvwprintw(Score_Window,5,1,std::to_string(Level).c_str());
+  mvwprintw(Score_Window,7,1,"Lines");
+  mvwprintw(Score_Window,8,1,"Cleared :");
+  mvwprintw(Score_Window,9,1,std::to_string(Lines_Cleared-120).c_str());
   wrefresh(Score_Window);
+  
   if (Next_Piece == I) {
     mvwprintw(Future_Window,1,1,"         ");
     mvwprintw(Future_Window,2,1,"         ");
@@ -222,38 +240,28 @@ void Game::Update_Terminal(bool Piece_Inserted) {
       
       for (auto i : Filled_Rows) mvwprintw(Game_Window,i+1,1,"[][][][][][][][][][]");
       wrefresh(Game_Window);
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(std::chrono::milliseconds(55));
       for (auto i : Filled_Rows) mvwprintw(Game_Window,i+1,1,"[][][][]    [][][][]");
       wrefresh(Game_Window);
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(std::chrono::milliseconds(55));
       for (auto i : Filled_Rows) mvwprintw(Game_Window,i+1,1,"[][][]        [][][]");
       wrefresh(Game_Window);
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(std::chrono::milliseconds(55));
       for (auto i : Filled_Rows) mvwprintw(Game_Window,i+1,1,"[][]            [][]");
       wrefresh(Game_Window);
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(std::chrono::milliseconds(55));
       for (auto i : Filled_Rows) mvwprintw(Game_Window,i+1,1,"[]                []");
       wrefresh(Game_Window);
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(std::chrono::milliseconds(55));
       for (auto i : Filled_Rows) mvwprintw(Game_Window,i+1,1,"                    ");
       wrefresh(Game_Window);
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
-      for (auto i : Filled_Rows) mvwprintw(Game_Window,i+1,1,"[][][][][][][][][][]");
-      wrefresh(Game_Window);
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
-      for (auto i : Filled_Rows) mvwprintw(Game_Window,i+1,1,"                    ");
-      wrefresh(Game_Window);
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
-      for (auto i : Filled_Rows) mvwprintw(Game_Window,i+1,1,"[][][][][][][][][][]");
-      wrefresh(Game_Window);
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(std::chrono::milliseconds(55));
       for (auto i : Filled_Rows) Shift_Graphical_Matrix(i+4);
 
 
-      
+      Lines_Cleared+=Number_Of_Filled_Rows;
     }
   }
-  
 
   for (int i = 0; i<25; i++) {
     mvwprintw(Game_Window,i+1,1,Character_Rows[i].c_str());

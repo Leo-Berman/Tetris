@@ -9,8 +9,7 @@ int main(){
   Game* Game_Instance = new Game();
   SDL_Event Keyboard_Event;
   int Delay_Auto_Shift = 16;
-  int First_Hit_Timer = 6;
-  int Frames_Until_Fall = Game_Instance->Level;
+  int Frames_Until_Fall = Game_Instance->Get_Frame_Rate();
 
   bool Game_Over = false;
   
@@ -135,7 +134,7 @@ int main(){
       }
 
       if (Frames_Until_Fall == 0) {
-	Frames_Until_Fall = Game_Instance->Level;
+	Frames_Until_Fall = Game_Instance->Get_Frame_Rate();
 	Game_Over = Game_Instance->Advance_Frame();
       
       }
@@ -144,7 +143,6 @@ int main(){
 	Delay_Auto_Shift--;
       }
 
-      First_Hit_Timer--;
       Frames_Until_Fall--;
     }
 

@@ -48,12 +48,14 @@ class Game{
   int Graphical_Matrix[29][14] = {};
   int Level;
   int Next_Piece;
+  int Lines_Cleared;
   Piece* Active_Piece;
   Game();
   ~Game();
   void Shift_Graphical_Matrix(int Row_To_Dissapear);
   bool Check_Row(int Row_To_Check);
   bool Is_Game_Over();
+  int Get_Frame_Rate();
   void Update_Terminal(bool Piece_Inserted = false);  
   WINDOW* Initialize_Game_Window();
   WINDOW* Initialize_Future_Window();
