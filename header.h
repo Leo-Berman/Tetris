@@ -4,7 +4,13 @@
 #include <vector>
 #include <chrono>
 #include <thread>
+
+
+// for terminal
+#include <termios.h>
+#include <unistd.h>
 #include <string.h>
+#include <sys/ioctl.h>
 
 #ifndef PIECE_H
 #define PIECE_H
@@ -40,7 +46,7 @@ class Piece {
 #define GAME_H
 
 class Game {
- public:
+public:
   int score;
   int graphical_matrix[29][14] = {};
   int level;
@@ -57,12 +63,19 @@ class Game {
 #ifndef TERMINAL_H
 #define TERMINAL_H
 
-class Terminal {
+// set a macro that is a mask that uses the control key
+//
+#define CTRL_KEY(k) ((k) & 0x1f)
 
+class Terminal {
+public:
+  struct termios original_terminal;
+  struct termios terminal_info;
+  struct winsize terminal_size;
   Terminal();
   ~Terminal();
-  void update_terminal(std::string
-  
-}
+  bool update_terminal();
+  void reset_terminal();
+};
 
 #endif
