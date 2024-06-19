@@ -1,12 +1,11 @@
 #include "header.h"
 
-int main() {
+int main() {;
   Terminal terminal = Terminal();
-
+  Game game = Game();
   while(true) {
-    if (terminal.update_terminal() == false) {
-      break;
+    if(terminal.process_keystroke(game) == false) break;
+    terminal.update_terminal(game);
     }
-  }
 
 }

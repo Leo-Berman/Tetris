@@ -85,7 +85,8 @@ public:
   ~Terminal();
 
   bool process_keystroke(Game game);
-  void update_terminal(Game game);
+  
+  void update_terminal(int graphical_matrix[GLOBAL_ROW_NUMBERS][GLOBAL_ROW_SIZE]);
   std::string update_row(int row[GLOBAL_ROW_SIZE]);
 
   void reset_terminal();
