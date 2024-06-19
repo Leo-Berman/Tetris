@@ -8,46 +8,46 @@ Piece::Piece(int Type) {
   
   switch(Type) {
   case(I):
-    coordinates[0] = make_tuple(2,5);
-    coordinates[1] = make_tuple(2,6);
-    coordinates[2] = make_tuple(2,7);
-    coordinates[3] = make_tuple(2,8);
+    coordinates[0] = make_tuple(0,4);
+    coordinates[1] = make_tuple(0,5);
+    coordinates[2] = make_tuple(0,6);
+    coordinates[3] = make_tuple(0,7);
     break;
   case(Z):
-    coordinates[0] = make_tuple(2,6);
-    coordinates[1] = make_tuple(2,7);
-    coordinates[2] = make_tuple(3,7);
-    coordinates[3] = make_tuple(3,8);
+    coordinates[0] = make_tuple(0,5);
+    coordinates[1] = make_tuple(0,6);
+    coordinates[2] = make_tuple(1,6);
+    coordinates[3] = make_tuple(1,7);
     break;
   case(S):
-    coordinates[0] = make_tuple(3,6);
-    coordinates[1] = make_tuple(3,7);
-    coordinates[2] = make_tuple(2,7);
-    coordinates[3] = make_tuple(2,8);
-    break;
-  case(J):
-    coordinates[0] = make_tuple(2,5);
-    coordinates[1] = make_tuple(2,6);
-    coordinates[2] = make_tuple(2,7);
-    coordinates[3] = make_tuple(3,7);
-    break;
-  case(L):
-    coordinates[0] = make_tuple(3,5);
-    coordinates[1] = make_tuple(2,5);
-    coordinates[2] = make_tuple(2,6);
-    coordinates[3] = make_tuple(2,7);
-    break;
-  case(O):
-    coordinates[0] = make_tuple(2,6);
-    coordinates[1] = make_tuple(1,6);
-    coordinates[2] = make_tuple(2,7);
-    coordinates[3] = make_tuple(1,7);
-    break;
-  case(T):
     coordinates[0] = make_tuple(1,5);
     coordinates[1] = make_tuple(1,6);
-    coordinates[2] = make_tuple(2,6);
-    coordinates[3] = make_tuple(1,7);
+    coordinates[2] = make_tuple(0,6);
+    coordinates[3] = make_tuple(0,7);
+    break;
+  case(J):
+    coordinates[0] = make_tuple(0,4);
+    coordinates[1] = make_tuple(0,5);
+    coordinates[2] = make_tuple(0,6);
+    coordinates[3] = make_tuple(1,6);
+    break;
+  case(L):
+    coordinates[0] = make_tuple(1,5);
+    coordinates[1] = make_tuple(0,5);
+    coordinates[2] = make_tuple(0,5);
+    coordinates[3] = make_tuple(0,6);
+    break;
+  case(O):
+    coordinates[0] = make_tuple(1,5);
+    coordinates[1] = make_tuple(0,5);
+    coordinates[2] = make_tuple(1,6);
+    coordinates[3] = make_tuple(0,6);
+    break;
+  case(T):
+    coordinates[0] = make_tuple(0,4);
+    coordinates[1] = make_tuple(0,5);
+    coordinates[2] = make_tuple(1,5);
+    coordinates[3] = make_tuple(0,6);
     break;
   }
 
@@ -66,7 +66,6 @@ bool Piece::is_game_over(int graphical_matrix[GLOBAL_ROW_NUMBERS][GLOBAL_ROW_SIZ
 bool Piece::down(int graphical_matrix[GLOBAL_ROW_NUMBERS][GLOBAL_ROW_SIZE]) {
   
   bool ok_to_move = true;
-  
   for (auto [i,j] : coordinates) {
     if ((graphical_matrix[i+1][j]==1) | (i == GLOBAL_ROW_NUMBERS - 1)) ok_to_move = false;
   }

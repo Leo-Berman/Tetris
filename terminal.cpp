@@ -13,6 +13,16 @@ Terminal::Terminal() {
   terminal_info.c_cc[VTIME] = 1;
 
   tcsetattr(STDIN_FILENO, TCSAFLUSH, &terminal_info);
+  std::string tmp = "";
+  tmp.append("\E[H\E[J________________________\n");
+
+  for (int row_index = 0; row_index < GLOBAL_ROW_NUMBERS; row_index++) {
+    tmp.append("|                      |\n");
+  }
+	
+  tmp.append("________________________\n");
+
+  printf("%s",tmp.c_str());
 }
 
 Terminal::~Terminal() {
@@ -43,7 +53,8 @@ std::string Terminal::update_row(int row[GLOBAL_ROW_SIZE]) {
        }
        else {
 	 return_string.append("[]");
-
+	 if (row[column_index] == 2) {
+	   }
        }
 
      }
@@ -53,23 +64,47 @@ std::string Terminal::update_row(int row[GLOBAL_ROW_SIZE]) {
 
 
 
+
 void Terminal::update_terminal(Game game) {
+
+  int horizontal_conversion;
+  char tmp[11];
   
-  std::string tmp = "";
-  
-  for (int row_index = 0; row_index < GLOBAL_ROW_NUMBERS; row_index++) {
-    //write(STDOUT_FILENO, "______________________\n", 23);
-    tmp.append(update_row(game.graphical_matrix[row_index]));
+  for (auto[i,j] : game.active_piece->coordinates) {
+    
+    
+    if (j == 0) {
+      horizontal_conversion = 1;
+    }
+    else {
+      horizontal_conversion = (j*2)+1;
+    }
+    
+    sprintf(tmp,"\x1b[%d;%dH",i+2,horizontal_conversion);
+    //printf("\x1b[%d;%dH",i+2,horizontal_conversion);
+    //printf("  ");
+    write(STDOUT_FILENO,tmp,8);
+    write(STDOUT_FILENO,"  ",2);
+  }
+  game.update_game();
+  for (auto[i,j] : game.active_piece->coordinates) {
+    
+    if (j == 0) {
+      horizontal_conversion = 1;
+    }
+    else {
+      horizontal_conversion = (j*2)+1;
+    }
+    //printf("\x1b[%d;%dH,[]",i,j);
+    //printf("\x1b[%d;%dH",i+2,horizontal_conversion);
+    //printf("[]");
+    sprintf(tmp,"\x1b[%d;%dH",i+2,horizontal_conversion);
+    write(STDOUT_FILENO,tmp,8);
+    write(STDOUT_FILENO,"[]",2);
   }
 
+  printf("\x1b[%d;%dH",0,0);
   std::this_thread::sleep_for(std::chrono::microseconds(16667));
-
-  write(STDOUT_FILENO, "\x1b[2J", 4);
-  write(STDOUT_FILENO, "\x1b[H", 3);
-  write(STDOUT_FILENO, "______________________\n", 23);
   
-  write(STDOUT_FILENO,tmp.c_str(),23*GLOBAL_ROW_NUMBERS);
-
-  write(STDOUT_FILENO, "|____________________|\n", 23);
 }
 

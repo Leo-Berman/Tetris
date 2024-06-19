@@ -52,6 +52,10 @@ class Piece {
 #ifndef GAME_H
 #define GAME_H
 
+#define LEFT  0
+#define DOWN  1
+#define RIGHT 2
+
 class Game {
 public:
   Game();
@@ -62,6 +66,10 @@ public:
   int next_piece;
   int lines_cleared;
   Piece* active_piece;
+  int frames_since_last_update;
+  int drop_frame_rate;
+  int current_action;
+  void update_game();
   void shift_graphical_matrix(int row_do_dissapear);
   bool check_row(int row_to_check);
   bool is_game_over();
