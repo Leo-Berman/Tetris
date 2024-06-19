@@ -11,14 +11,12 @@ int main() {;
   threads.push_back(std::thread(&Terminal::process_keystroke,std::ref(terminal),game));*/
   
    std::thread t1 = std::thread(std::thread(&Terminal::update_terminal,std::ref(terminal),game));
-    std::thread t2 = std::thread(&Terminal::process_keystroke,std::ref(terminal),game);
- 
-  while(true) {
-
-   
     
     t1.detach();
-      t2.detach();
+  while(true) {
+
+    std::thread t2 = std::thread(&Terminal::process_keystroke,std::ref(terminal),game);
+    t2.join();
 
    
     }
